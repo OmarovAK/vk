@@ -1,0 +1,4 @@
+venv/
+.idea/
+vk_config.v2.json
+__pycache__/
