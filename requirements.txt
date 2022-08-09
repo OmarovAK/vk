@@ -1,4 +1,0 @@
-SQLAlchemy
-psycopg2
-requests
-vk-api
