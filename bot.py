@@ -1,7 +1,6 @@
 import random
 import vk_api
 import requests
-from connect_to_base import db
 from vk_api.longpoll import VkLongPoll, VkEventType
 from vk_api.keyboard import VkKeyboard, VkKeyboardColor
 from vk_api import VkUpload
