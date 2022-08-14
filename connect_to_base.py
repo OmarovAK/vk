@@ -14,4 +14,4 @@ class DB_connections:
         return connection
 
 
-db = DB_connections('anuar', '123456', 'vk_bot')
+db = DB_connections('postgres', '123456', 'vk_base')

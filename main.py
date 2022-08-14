@@ -1,7 +1,40 @@
 from bot import VK
+from models import create_tables
+import os
 
-user_vk = VK(group_id='215217227',
-             token="vk1.a.acscNKsdVoIAwaRfAyPAEx2oq4bNmklARhMiC-zsOP8jfdJj9wFcfPYr4GuMRxbYCo4qCGwGilMy2s6kq8puKHcGTrg0ogU2DnlDrJ0ixdXgU-oGMf_asN3K_f7JpQQPJHrscsk0QbKelNZMB35RGIeCJP8VxvsEAtdjFBtO_bmElKv7oqcL8mZc_h9DPIQO",
-             ind_token="vk1.a.Rm5Lc64V6GaKQAheMOvqVyq70pDyYkIBd4eo88BToOuHg0aTx4hMmi6CnRdJwXs7S9eM1ZB3KIzu7iKy4POrxKCWjiGYaOt8ksb_5hUNgtbkf4KD6DYX5papGiRVXNeb9YEEoUd3QoEgHrExb0x_vtka64Si2JQqD7-9oBsNaO2KW5LQSnZkRMjaDfqDhf42")
+file = os.path.join(os.getcwd(), 'tokens.txt')
 
-user_vk.vk_bot()
+with open(file, mode='r', encoding='utf-8') as f:
+    group_id = f.readline().strip()
+    group_token = f.readline().strip()
+    ind_token = f.readline().strip()
+
+
+user_vk = VK(group_id=group_id,
+             token=group_token,
+             ind_token=ind_token)
+
+list_command = {
+    'create': 'Создание новой БД',
+    'bot': 'Запуск бота'
+}
+
+print('Cписок команд:')
+for k, v in list_command.items():
+    print(f' Команда: {k} - действие:  {v}')
+
+command = input('Введите команду: ')
+count = 0
+while count == 0:
+    if command == 'create':
+        create_tables()
+        print('Таблицы созданы')
+        command = input('Введите команду bot: ')
+
+    elif command == 'bot':
+        print('Бот запущен')
+        user_vk.vk_bot()
+        count = 1
+    else:
+        command = input('Введите правильную команду: ')
+
