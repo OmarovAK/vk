@@ -109,13 +109,16 @@ class VK:
 
                         }
                         res_partner = requests.get(url=url, params=params)
+                        print(len(res_partner.json()['response']['items']))
 
-                        if not res_partner.json()['response']['items'][0]['is_closed'] and not user_vk_partner_search(
-                                id_user, res_partner.json()['response']['items'][0]['id']):
-                            if res_partner.json()['response']['items'][0]['id'] not in local_ids_list:
-                                count = 1
-                                result_id = res_partner.json()['response']['items'][0]['id']
-                                local_ids_list.append(result_id)
+                        if len(res_partner.json()['response']['items']) > 0:
+                            if not res_partner.json()['response']['items'][0][
+                                'is_closed'] and not user_vk_partner_search(
+                                    id_user, res_partner.json()['response']['items'][0]['id']):
+                                if res_partner.json()['response']['items'][0]['id'] not in local_ids_list:
+                                    count = 1
+                                    result_id = res_partner.json()['response']['items'][0]['id']
+                                    local_ids_list.append(result_id)
                         print(local_ids_list)
 
                     name_favourite = res_partner.json()['response']['items'][0]['first_name']
@@ -145,20 +148,28 @@ class VK:
                     for i in list_count_likes[-3:]:
                         for k in dict_photos:
                             if i == k['likes']['count']:
-                                list_urls.append(k['sizes'][-1]['url'])
-                    my_dict = dict(zip(list_count_likes[-3:], list_urls))
+                                url = f"{k['sizes'][-1]['url']}"
+                                list_urls.append(url)
+                                k['likes']['count'] = 0
+
+                    my_dict = dict(zip(list_urls[-3:], list_count_likes[-3:]))
+                    print('Лайки', list_count_likes[-3:])
+                    for i in list_urls[-3:]:
+                        print(i)
+                    sorted_tuple = sorted(my_dict.items(), key=lambda x: x[1], reverse=True)
+                    my_dict = dict(sorted_tuple)
 
                     count = 1
-                    for k, i in sorted(my_dict.items(), reverse=True):
+                    for k, i in my_dict.items():
                         name_favourite = res_partner.json()['response']['items'][0]['first_name']
                         last_name_fav = res_partner.json()['response']['items'][0]['last_name']
 
-                        image_url = i
+                        image_url = k
                         image = session.get(image_url, stream=True)
                         photo = upload.photo_messages(photos=image.raw)[0]
                         attachments = 'photo{}_{}'.format(photo['owner_id'], photo['id'])
                         send_message(user_id,
-                                     f'Фотография  пользователя {name_favourite} {last_name_fav} # {count}, с количеством лайков {k}',
+                                     f'Фотография  пользователя {name_favourite} {last_name_fav} # {count}, с количеством лайков {i}',
                                      attachment=attachments, keyboard=keyboard)
                         count = count + 1
 
@@ -166,7 +177,7 @@ class VK:
                     profile_link = f"https://vk.com/id{id_fav}"
 
                     send_message(user_id,
-                                 f'Количество фотографий в альбоме {name_favourite} {last_name_fav} - {len(list_count_likes)} шт.\n'
+                                 f'Количество фотографий в альбоме {name_favourite} {last_name_fav} - {len(dict_photos)} шт.\n'
                                  f'ссылка на профайл - {profile_link}',
                                  keyboard=keyboard)
                 elif message == 'добавить в избранное':
