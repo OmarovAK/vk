@@ -1,10 +1,11 @@
 import sqlalchemy
 from models import User_vk, Black_list, Favorite_partners, Partners
 from sqlalchemy.orm import sessionmaker
+from models import password_base
 
 
 def read_password():
-    password = '123456'
+    password = password_base
     return password
 
 

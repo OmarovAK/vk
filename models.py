@@ -3,6 +3,8 @@ from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
 Base = declarative_base()
 
+password_base = 123456
+
 
 class User_vk(Base):
     __tablename__ = 'user_vk'
@@ -68,7 +70,7 @@ class Favorite_partners(Base):
 
 
 def create_tables():
-    engine = sq.create_engine('postgresql://postgres:123456@localhost:5432/vk_base')
+    engine = sq.create_engine(f'postgresql://postgres:{password_base}@localhost:5432/vk_base')
     Base.metadata.drop_all(engine)  # ----удаляет все существующие таблицы перед созданием---
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=create_tables)

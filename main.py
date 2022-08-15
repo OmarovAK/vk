@@ -9,7 +9,6 @@ with open(file, mode='r', encoding='utf-8') as f:
     group_token = f.readline().strip()
     ind_token = f.readline().strip()
 
-
 user_vk = VK(group_id=group_id,
              token=group_token,
              ind_token=ind_token)
@@ -37,4 +36,3 @@ while count == 0:
         count = 1
     else:
         command = input('Введите правильную команду: ')
-
